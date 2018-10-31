@@ -4,7 +4,7 @@ from sklearn.preprocessing import LabelEncoder, OneHotEncoder, StandardScaler
 from sklearn.model_selection import train_test_split, GridSearchCV
 import keras
 from keras.models import Sequential
-from keras.layers import Dense
+from keras.layers import Dense, Dropout
 from keras.wrappers.scikit_learn import KerasClassifier
 import defs
 
@@ -28,11 +28,11 @@ X_train=sc.fit_transform(X_train)
 X_test=sc.transform(X_test)
 
 classifier=KerasClassifier(build_fn=defs.build_classifier)
-parameters={'batch_size':[25,30],
-'nb_epoch':[200,500],
-'optimizer':['adam','rmsprop']
+parameters={'batch_size':[5,6],
+'epochs':[10,11],
+'opti':['adam','rmsprop']
 }
-grid_search=GridSearchCV(estimator=classifier,param_grid=parameters,cv=10,scoring='accuracy')
+grid_search=GridSearchCV(estimator=classifier,param_grid=parameters,cv=10,scoring='accuracy',n_jobs=-1)
 grid_search=grid_search.fit(X_train,Y_train)
 
 print(grid_search.best_params_)

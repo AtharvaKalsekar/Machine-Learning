@@ -27,7 +27,7 @@ sc=StandardScaler()
 X_train=sc.fit_transform(X_train)
 X_test=sc.transform(X_test)
 
-classifier=KerasClassifier(build_fn=defs.build_classifier(opti='adam'),batch_size=10,nb_epoch=1000)
+classifier=KerasClassifier(build_fn=defs.build_classifier,batch_size=10,epochs=100)
 accuracies=cross_val_score(estimator=classifier, X=X_train,y=Y_train,cv=10,n_jobs=-1)
 mean=accuracies.mean()
 vari=accuracies.std()

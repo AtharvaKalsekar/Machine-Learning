@@ -5,8 +5,9 @@ from sklearn.preprocessing import LabelEncoder,OneHotEncoder, StandardScaler
 from sklearn.model_selection import train_test_split
 import keras
 from keras.models import Sequential
-from keras.layers import Dense
+from keras.layers import Dense, Dropout
 from sklearn.metrics import confusion_matrix
+import imp
 
 dataset=pd.read_csv('Churn_Modelling.csv')
 X=dataset.iloc[:,3:13].values
@@ -31,11 +32,13 @@ X_test=sc.transform(X_test)
 
 classifier=Sequential()
 
-classifier.add(Dense(output_dim=6,init='uniform',activation='relu',input_dim=11))
-classifier.add(Dense(output_dim=6,init='uniform',activation='relu'))
-classifier.add(Dense(output_dim=1,init='uniform',activation='sigmoid'))
+classifier.add(Dense(units=6,kernel_initializer='uniform',activation='relu',input_dim=11))
+classifier.add(Dropout(rate=0.1))
+classifier.add(Dense(units=6,kernel_initializer='uniform',activation='relu'))
+classifier.add(Dropout(rate=0.1))
+classifier.add(Dense(units=1,kernel_initializer='uniform',activation='sigmoid'))
 classifier.compile(optimizer='adam',loss='binary_crossentropy',metrics=['accuracy'])
-classifier.fit(X_train,Y_train,batch_size=10,nb_epoch=100)
+classifier.fit(X_train,Y_train,batch_size=10,epochs=100)
 
 Y_pred=classifier.predict(X_test)
 Y_pred=(Y_pred>0.5)
